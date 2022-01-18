@@ -1,0 +1,18 @@
+.flex-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.eventButton {
+  width: 20em;
+  height: 20em;
+  justify-content: space-between;
+}
+.flex-wrapper > * {
+  margin: 3em;
+  justify-content: center;
+}
+#event-container {
+  margin-top: 2em;
+}
