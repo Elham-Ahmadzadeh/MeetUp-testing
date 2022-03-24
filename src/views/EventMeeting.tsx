@@ -1,5 +1,5 @@
 import JoinButton from "../components/JoinButton";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Rating } from "react-simple-star-rating";
 import { Event } from "../models/Event";
 import "./EventMeeting.css";
@@ -15,17 +15,33 @@ export default function EventMeeting({ event, onClose, onRateEvent }: Props) {
   const [value, setValue] = useState("");
   const [comments, setComments] = useState<Comment[]>([]);
   const [rating, setRating] = useState(0);
+  const [join, setJoin] = useState(false);
 
   interface Comment {
     id: number;
     text: string;
   }
-
+ useEffect(() => {
+const userJoined =localStorage.getItem('join' + event.id)
+const membrNumbers =  localStorage.getItem('member' + event.id)
+const updatedMembers = membrNumbers === null ? 1 : parseInt(membrNumbers)
+const updateJoin = userJoined === null ? false : true
+setMember(updatedMembers)
+setJoin(updateJoin)
+}, [event.id]) 
   function handleRating(rate: number) {
     setRating(rate);
     onRateEvent(rate);
   }
+  function onClickJoin(member: number) {
+  const checkFalse =  join ? false : true
+  setJoin(checkFalse)
+  setMember(member)
+  localStorage.setItem('join' + event.id , checkFalse.toString())
+  localStorage.setItem('member' + event.id, member.toString())
 
+  }
+  
   function createComment() {
     let cloneComments: Comment[] = [
       ...comments,
@@ -34,20 +50,18 @@ export default function EventMeeting({ event, onClose, onRateEvent }: Props) {
         text: value,
       },
     ];
-
     setComments(cloneComments);
   }
 
   return (
     <div className="event-meeting">
       <div className="join">
-        <JoinButton member={member} setMember={setMember} />
+        <JoinButton member={member} setMember={onClickJoin} joined={join} />
         <span className="going">{member} are going</span>
       </div>
       <header>
         <h1>{event.title}</h1>
       </header>
-
       <main>
         <div className="starflex">
           <Rating onClick={handleRating} ratingValue={rating} />
@@ -58,7 +72,9 @@ export default function EventMeeting({ event, onClose, onRateEvent }: Props) {
         <span>Leave a comment: </span>
         <input
           type="text"
-          onChange={(event: any) => setValue(event.target.value)}
+          onChange={(event: any) => 
+            setValue(event.target.value)
+          }
         />
         <button onClick={() => createComment()} className="sendBtn">
           Send

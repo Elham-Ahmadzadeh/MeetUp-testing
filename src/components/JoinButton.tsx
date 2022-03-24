@@ -1,28 +1,26 @@
-import { useState } from "react";
 interface Props {
   member: number;
   setMember: (value: number) => void;
+  joined: boolean;
 }
-export default function JoinButton({ member, setMember }: Props) {
-  const [join, setJoin] = useState(false);
+export default function JoinButton({ member, setMember, joined }: Props) {
+
+  //localStorage.setItem('join', JSON.stringify(join));
+  // member =  JSON.parse(localStorage.getItem('join') || '{}');
   return (
     <>
       <button
         type="button"
         onClick={() => {
-          if (join === false) {
-            setJoin(true);
-            setMember(member + 1);
-          } else if (join === true && member > 1) {
-            setJoin(false);
-            setMember(member - 1);
+          if (joined) {
+            setMember(member - 1);   
+          } else {
+            setMember(member + 1);  
           }
         }}
       >
-        <p className="btnText">{join ? "Joined" : "Join"}</p>
+        <p className="btnText">{joined ? "Joined" : "Join"}</p>
       </button>
     </>
   );
 }
-
-

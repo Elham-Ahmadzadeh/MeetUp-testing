@@ -65,13 +65,13 @@ describe("EventMeeting component", () => {
   it("test if join btn works correctly", () => {
     let member = 1;
     let setMember = (value: number) => (member = value);
-    const btn = mount(<JoinButton member={member} setMember={setMember} />);
+    const btn = mount(<JoinButton member={member} setMember={setMember} joined={true}/>);
     btn.simulate("click");
     expect(member).toBe(2);
   });
 
   it("show joined after clicking once on join button", () => {
-    const btnWrapper = mount(<JoinButton member={1} setMember={() => {}} />);
+    const btnWrapper = mount(<JoinButton member={1} setMember={() => {}} joined={true}/>);
     btnWrapper.simulate("click");
 
     const actualText = btnWrapper.find(".btnText").text();
@@ -79,7 +79,7 @@ describe("EventMeeting component", () => {
     expect(actualText).toBe("Joined");
   });
   it("show join after clicking twice on join button", () => {
-    const btnContainer = mount(<JoinButton member={2} setMember={() => {}} />);
+    const btnContainer = mount(<JoinButton member={2} setMember={() => {}} joined={true} />);
     btnContainer.simulate("click");
     btnContainer.simulate("click");
     const actualText = btnContainer.find("p").text();
