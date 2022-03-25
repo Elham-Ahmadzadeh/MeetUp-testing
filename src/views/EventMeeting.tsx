@@ -21,27 +21,30 @@ export default function EventMeeting({ event, onClose, onRateEvent }: Props) {
     id: number;
     text: string;
   }
- useEffect(() => {
-const userJoined =localStorage.getItem('join' + event.id)
-const membrNumbers =  localStorage.getItem('member' + event.id)
-const updatedMembers = membrNumbers === null ? 1 : parseInt(membrNumbers)
-const updateJoin = userJoined === null ? false : true
-setMember(updatedMembers)
-setJoin(updateJoin)
-}, [event.id]) 
+
+  useEffect(() => {
+    const userJoined = localStorage.getItem("join" + event.id);
+    const membrNumbers = localStorage.getItem("member" + event.id);
+    const updatedMembers = membrNumbers === null ? 1 : parseInt(membrNumbers);
+    const getComment = localStorage.getItem(event.id + "comment");
+    const updatedComment = getComment === null ? [] : JSON.parse(getComment);
+    const updateJoin = userJoined === null ? false : true;
+    setMember(updatedMembers);
+    setComments(updatedComment);
+    setJoin(updateJoin);
+  }, [event.id]);
   function handleRating(rate: number) {
     setRating(rate);
     onRateEvent(rate);
   }
   function onClickJoin(member: number) {
-  const checkFalse =  join ? false : true
-  setJoin(checkFalse)
-  setMember(member)
-  localStorage.setItem('join' + event.id , checkFalse.toString())
-  localStorage.setItem('member' + event.id, member.toString())
-
+    const checkFalse = join ? false : true;
+    setJoin(checkFalse);
+    setMember(member);
+    localStorage.setItem("join" + event.id, checkFalse.toString());
+    localStorage.setItem("member" + event.id, member.toString());
   }
-  
+
   function createComment() {
     let cloneComments: Comment[] = [
       ...comments,
@@ -50,9 +53,9 @@ setJoin(updateJoin)
         text: value,
       },
     ];
+    localStorage.setItem(event.id + "comment", JSON.stringify(cloneComments));
     setComments(cloneComments);
   }
-
   return (
     <div className="event-meeting">
       <div className="join">
@@ -72,9 +75,7 @@ setJoin(updateJoin)
         <span>Leave a comment: </span>
         <input
           type="text"
-          onChange={(event: any) => 
-            setValue(event.target.value)
-          }
+          onChange={(event: any) => setValue(event.target.value)}
         />
         <button onClick={() => createComment()} className="sendBtn">
           Send
@@ -96,5 +97,3 @@ setJoin(updateJoin)
     </div>
   );
 }
-
-
